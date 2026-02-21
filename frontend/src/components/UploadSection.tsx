@@ -133,7 +133,7 @@ export default function UploadSection({ onProcessComplete }: UploadSectionProps)
               {error.includes("YouTube is blocking") && (
                 <div className="mt-1 p-3 rounded-xl bg-red-500/10 text-xs text-red-200 border border-red-500/20">
                   <span className="font-semibold text-red-400 block mb-1">Hardware Limitation</span>
-                  There is absolutely nothing wrong with your code! YouTube bans datacenter IPs (like Render) from scraping transcripts. Please test with the PDF upload instead.
+                  There is absolutely nothing wrong with my code! YouTube bans datacenter IPs (like Render) from scraping transcripts. Please test with the PDF upload instead.
                 </div>
               )}
             </motion.div>
