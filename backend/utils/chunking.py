@@ -12,17 +12,20 @@ def extract_youtube_video_id(url: str) -> str:
 
 import youtube_transcript_api
 
-def get_youtube_transcript(video_id: str) -> str:
+def get_youtube_transcript(video_id: str) -> tuple[str, str]:
     """Fetches the transcript of a YouTube video."""
     try:
         from youtube_transcript_api import YouTubeTranscriptApi
         transcript_obj = YouTubeTranscriptApi().list(video_id).find_transcript(['en'])
         transcript_list = transcript_obj.fetch()
         transcript = " ".join([t.text for t in transcript_list])
-        return transcript
+        return transcript, ""
     except Exception as e:
-        print(f"Error fetching transcript: {e}")
-        return ""
+        err = str(e)
+        print(f"Error fetching transcript: {err}")
+        if "YouTube is blocking requests" in err or "cloud provider" in err:
+            return "", "YouTube is blocking requests from this server's IP address (a common restriction for free cloud platforms). Please try the PDF upload feature instead!"
+        return "", "Could not fetch transcript. Make sure the video has public English subtitles."
 
 def extract_text_from_pdf(file_path: str) -> str:
     """Extracts text from a given PDF file path."""

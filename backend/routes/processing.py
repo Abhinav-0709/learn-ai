@@ -14,9 +14,9 @@ async def process_video(request: ProcessVideoRequest):
     if not video_id:
         raise HTTPException(status_code=400, detail="Invalid YouTube URL")
 
-    transcript = get_youtube_transcript(video_id)
+    transcript, err_message = get_youtube_transcript(video_id)
     if not transcript:
-        raise HTTPException(status_code=400, detail="Could not fetch transcript for this video")
+        raise HTTPException(status_code=400, detail=err_message)
 
     # Store document metadata
     try:
