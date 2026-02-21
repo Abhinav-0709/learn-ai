@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Youtube, FileText, Upload, Link as LinkIcon, ArrowRight, Loader2 } from "lucide-react";
+import { Youtube, FileText, Upload, Link as LinkIcon, ArrowRight, Loader2, X, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -109,11 +109,36 @@ export default function UploadSection({ onProcessComplete }: UploadSectionProps)
           </button>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center">
-            {error}
-          </div>
-        )}
+        {/* Floating Error Toast */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 max-w-sm p-5 rounded-2xl bg-zinc-900/95 backdrop-blur-md border border-red-500/30 shadow-2xl shadow-red-900/20 flex flex-col gap-3"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-2 text-red-400 font-semibold">
+                  <AlertTriangle className="w-5 h-5 text-red-500" />
+                  Processing Blocked
+                </div>
+                <button onClick={() => setError("")} className="text-zinc-500 hover:text-white transition-colors p-1 bg-zinc-800 rounded-md">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-sm text-zinc-300 leading-relaxed">
+                {error}
+              </p>
+              {error.includes("YouTube is blocking") && (
+                <div className="mt-1 p-3 rounded-xl bg-red-500/10 text-xs text-red-200 border border-red-500/20">
+                  <span className="font-semibold text-red-400 block mb-1">Hardware Limitation</span>
+                  There is absolutely nothing wrong with your code! YouTube bans datacenter IPs (like Render) from scraping transcripts. Please test with the PDF upload instead.
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence mode="wait">
           {activeTab === 'youtube' ? (
